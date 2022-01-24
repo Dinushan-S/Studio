@@ -14,7 +14,8 @@ class ExpensesController extends Controller
      */
     public function index()
     {
-        //
+        $expenses=Expenses::all();
+        return response($expenses, 201);
     }
 
     /**

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Models\Package;
 
 class BookingController extends Controller
 {
@@ -82,4 +84,33 @@ class BookingController extends Controller
     {
         //
     }
+
+    public function categoryPackage(Request $request){
+        $categories=Category::all();
+        $packages=Package::all();
+        $categoryPackage=[];
+        $categoryPackageFilter=[];
+        //get all categories and packages for each catergory
+
+        $parentCategories=[];
+        $parentCategories=$categories->where('parent_id',null);
+        $childCategories=[];
+        $childCategories=$categories->where('parent_id','!=',null);
+
+        foreach($childCategories as $category){
+            $categoryPackage[$category->id]=[
+                'category'=>$category,
+                'packages'=>$packages->where('category_id',$category->id)
+            ];
+        }
+
+        foreach($parentCategories as $category){
+            $category['child']=$childCategories->where('parent_id',$category->id);
+        }
+        return response($parentCategories, 201);
+    }
+
+
+
+
 }

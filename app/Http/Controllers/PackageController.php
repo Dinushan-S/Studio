@@ -14,7 +14,8 @@ class PackageController extends Controller
      */
     public function index()
     {
-        //
+        $packages=Package::all();
+        return response($packages, 201);
     }
 
     /**
@@ -35,7 +36,18 @@ class PackageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $fields = $request->validate([
+            'category_id' => 'required|string',
+            'description'=> 'required|string',
+            'price'=> 'required',
+        ]);
+        $category = Package::create([
+            'category_id'=> $fields['category_id'],
+            'description' => $request['description'],
+            'price' => $request['price'],
+            'is_deleted'=> false,
+        ]);
+        return response($category, 201);
     }
 
     /**

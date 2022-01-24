@@ -14,7 +14,8 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $customer=Customer::all();
+        return response($customer, 201);
     }
 
     /**
@@ -35,7 +36,16 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $fields = $request->validate([
+            'name' => 'required|string',
+            'contact_mobile'=> 'required|string',
+        ]);
+        $category = Customer::create([
+            'name'=> $fields['name'],
+            'contact_mobile' => $request['contact_mobile'],
+            'is_deleted'=> false,
+        ]);
+        return response($category, 201);
     }
 
     /**
