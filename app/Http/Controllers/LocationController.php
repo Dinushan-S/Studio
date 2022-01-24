@@ -14,7 +14,8 @@ class LocationController extends Controller
      */
     public function index()
     {
-        //
+        $location=Location::all();
+        return response($location, 201);
     }
 
     /**

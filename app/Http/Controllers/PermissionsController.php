@@ -14,7 +14,8 @@ class PermissionsController extends Controller
      */
     public function index()
     {
-        //
+        $permissions=Permissions::all();
+        return response($permissions, 201);
     }
 
     /**

@@ -14,7 +14,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $category=Category::all();
+        return response($category, 201);;
     }
 
     /**
@@ -24,7 +25,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+       //
     }
 
     /**
@@ -35,7 +36,18 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $fields = $request->validate([
+            'name' => 'required|string'
+        ]);
+        if(isset($fields['parent_id'])){
+            $fields['parent_id']=null;   
+        }
+            $category = Category::create([
+                'name'=> $fields['name'],
+                'parent_id' => $request['parent_id'],
+                'is_deleted'=> false,
+            ]);
+        return response($category, 201);
     }
 
     /**
@@ -46,7 +58,17 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        
+        if(isset($category->id)){
+            try{
+                $category=Category::findOrFail($category->id);
+                return response($category, 201);
+            }catch(ModelNotFoundException $e){
+                return response(['error'=>'Category not found'], 404);
+            }
+        }else{
+            return response(['message'=>'Category ID not found'], 404);
+        }
     }
 
     /**
