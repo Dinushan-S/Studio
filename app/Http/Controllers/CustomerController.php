@@ -14,7 +14,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customer=Customer::all();
+        $customer=Customer::where('is_deleted',false)->get();
         return response($customer, 201);
     }
 
@@ -91,5 +91,33 @@ class CustomerController extends Controller
     public function destroy(Customer $customer)
     {
         //
+    }
+
+    public function patchCustomer(Request $request){
+        
+       if($request){
+        $customer=Customer::find($request->id);
+        $customer['name']=$request->name;
+        $customer['contact_mobile']=$request->contact_mobile;
+        $customer['is_deleted']=false;
+        $customer->save();
+        return response()->json([
+            'message'=>'Customer Updated successfully',
+            'customer'=>$customer,
+            'customers'=>Customer::where('is_deleted',false)->get()  
+        ],201);
+        
+       }
+    }
+
+    public function deleteCustomer(Request $request)
+    {
+        $customer = Customer::find($request->id);
+        $customer->is_deleted=true;
+        $customer->save();
+        return response()->json([
+            'message'=>'Customer Deleted successfully',
+            'customer'=>$customer,
+        ],201);
     }
 }
