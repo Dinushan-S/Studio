@@ -20,11 +20,17 @@ use App\Http\Controllers\BookingController;
 Route::post('/register', [AuthController::class,'register']);
 Route::post('/login', [AuthController::class,'login']);
 Route::get('/categoryPackage', [BookingController::class,'categoryPackage']);
+Route::resource('/booking', BookingController::class);
+Route::post('/booking/patch', [BookingController::class,'patchBooking']);
+Route::post('/booking/delete', [BookingController::class,'deleteBooking']);
+Route::post('/booking/status', [BookingController::class,'statusUpdate']);
 
 
 Route::resource('/category', CategoryController::class);
 Route::resource('/package', PackageController::class);
-Route::resource('/customer', CustomerController::class);
+Route::resource('/customers', CustomerController::class);
+Route::post('/customers/delete', [CustomerController::class,'deleteCustomer']);
+Route::post('/customers/patch', [CustomerController::class,'patchCustomer']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
